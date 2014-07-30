@@ -1,4 +1,4 @@
 StartHere
 =========
 
-initial scripts for Duckbox Development Toolchain 
+Initial scripts for Audioniek's Duckbox Development Toolchain 
