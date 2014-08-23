@@ -2,6 +2,8 @@
 
 DIR=`pwd`
 GITPULL="git pull"
+GITPUSH="git push origin master"
+GITSTATUS="git status"
 REPLIST="apps cdk driver flash"
 
 case "$1" in
@@ -20,21 +22,38 @@ case "$1" in
 				echo "git clone" $f
 			fi
 		done
-		sudo $DIR/prepare4cdk.sh
+		#sudo $DIR/prepare4cdk.sh
 		;;
 	pull)
 		for f in  $REPLIST ; do
 			cd $DIR/$f
-			echo "git pull" $f
+			echo "$GITPULL" $f
 			$GITPULL
+			cd ..
+			done
+			;;
+	push)
+		for f in  $REPLIST ; do
+			cd $DIR/$f
+			echo "$GITPUSH" $f
+			$GITPUSH
+			cd ..
+			done
+			;;
+	status)
+		for f in  $REPLIST ; do
+			cd $DIR/$f
+			echo "$GITSTATUS" $f
+			$GITSTATUS
 			cd ..
 			done
 			;;
 	*)
 		if [ -d cdk ]; then
-			echo "Usage: {clone | pull}"
+			echo "Usage: {clone | pull | push | status}"
 			exit 1
 		else
 			$0 clone
 		fi
+		;;
 esac
