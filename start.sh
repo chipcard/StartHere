@@ -14,7 +14,7 @@ case "$1" in
 			else
 				if [ "$2" = "dev" ]; then
 					# dev
-					git clone git@github.com:Audioniek/$f $f
+					git clone https://@github.com:Audioniek/$f.git $f
 				else
 					# usr
 					git clone git://github.com/Audioniek/$f $f
