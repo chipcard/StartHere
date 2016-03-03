@@ -37,8 +37,8 @@ Instructions
 
 9. After the build is complete change to the directory X/flash and
    execute fakeroot ./flash.sh to create the image to run on your
-   receiver. When the scription completes, the file(s) required will be
-   in the directory X/flash/out. Following the instructions shown in
+   receiver. When the script completes, the file(s) required will be
+   in the directory X/flash/out. Follow the instructions shown in
    green to move the image to receiver and run it.
 
 To update your build environment, execute ./start.sh pull in
