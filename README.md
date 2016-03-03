@@ -4,6 +4,7 @@ StartHere
 Initial scripts for Audioniek's Duckbox Development Toolchain 
 
 Instructions
+------------
 
 1. If your Linux installation does not support git, either install it, or
    download the file prepare4cdk.sh, make it executable end execute it
@@ -14,25 +15,19 @@ Instructions
 
 3. In directory X, open a terminal.
 
-4. Perform: git pull https://github.com/Audioniek/StartHere
+4. Execute: git pull https://github.com/Audioniek/StartHere
 
 5. Pull the remaining repositories by executing ./start.sh
 
 6. If not done previously, execute sudo ./prepare4cdk.sh. This will install
-   the missing packages, depending on your Linux distribution
+   the missing packages, depending on your Linux distribution.
 
 7. Download and extract a ready built image for the receiver you want
    to build for and extract the files audio.elf and video.elf from its
    /boot directory. Copy the files to the directory X/cdk/root/boot
    with the same names as well as the following names:
-   audio.elf -> audio_7100.elf
-   audio.elf -> audio_7105.elf
-   audio.elf -> audio_7109.elf
-   audio.elf -> audio_7111.elf
-   video.elf -> video_7100.elf
-   video.elf -> video_7105.elf
-   video.elf -> video_7109.elf
-   video.elf -> video_7111.elf
+   audio.elf to audio_7100.elf, audio_7105.elf, audio_7109.elf and audio_7111.elf,
+   video.elf to video_7100.elf, video_7105.elf, video_7109.elf and video_7111.elf.
 
 8. Change to the directory X/cdk, execute ./make.sh and follow the
    on screen instructions to start the build process.
