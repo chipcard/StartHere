@@ -110,6 +110,7 @@ PACKAGES="\
 	${UBUNTU:+libsdl-image1.2-dev} \
 	${UBUNTU:+cmake} \
 	${UBUNTU:+ruby} \
+	${UBUNTU:+libtool-bin} \
 ";
 
 if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
