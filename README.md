@@ -15,9 +15,9 @@ Instructions
 
 3. In directory X, open a terminal.
 
-4. Execute: git pull https://github.com/Audioniek/StartHere
+4. Execute: "git clone https://github.com/Audioniek/StartHere ."
 
-5. Pull the remaining repositories by executing ./start.sh
+5. Clone the remaining repositories by executing ./start.sh.
 
 6. If not done previously, execute sudo ./prepare4cdk.sh. This will install
    the missing packages, depending on your Linux distribution.
