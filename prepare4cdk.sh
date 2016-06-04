@@ -13,45 +13,62 @@ fi
 UBUNTU=
 FEDORA=
 SUSE=
+GENTOO=
 
 # Try to detect the distribution
 if `which lsb_release > /dev/null 2>&1`; then 
 	case `lsb_release -s -i` in
 		Debian*) UBUNTU=1; INSTALL="apt-get -y install";;
 		Fedora*) FEDORA=1; INSTALL="yum install -y";;
+		CentOS*) FEDORA=1; INSTALL="yum install -y";;
 		SUSE*)   SUSE=1;   INSTALL="zypper install -y";;
 		Ubuntu*) UBUNTU=1; INSTALL="apt-get -y install";;
 		LinuxM*) UBUNTU=1; INSTALL="apt-get --force-yes install";;
+		Gentoo) GENTOO=1; INSTALL="emerge -uN";;
 	esac
 fi
 
 # Not detected by lsb_release, try release files
-if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
+if [ -z "$FEDORA$GENTOO$SUSE$UBUNTU" ]; then
 	if   [ -f /etc/redhat-release ]; then FEDORA=1; INSTALL="yum install -y"; 
 	elif [ -f /etc/fedora-release ]; then FEDORA=1; INSTALL="yum install -y"; 
-	elif [ -f /etc/SuSE-release ];   then SUSE=1;   INSTALL="zypper install -y";
+	elif [ -f /etc/centos-release ]; then FEDORA=1; INSTALL="yum install -y"; 
+	elif [ -f /etc/SuSE-release ];   then SUSE=1;   INSTALL="zypper install -n";
 	elif [ -f /etc/debian_version ]; then UBUNTU=1; INSTALL="apt-get --force-yes install";
+	elif [ -f /etc/gentoo-release ]; then GENTOO=1; INSTALL="emerge -uN"
 	fi
 fi
 
 # still not detected, display error and let the user manually install
-if [ -z "$FEDORA$SUSE$UBUNTU" ]; then
+if [ -z "$FEDORA$GENTOO$SUSE$UBUNTU" ]; then
 	echo
 	echo "Cannot determine which OS distribution you use," 
 	echo "or your distribution is not (yet) supported." 
-	echo "Please report this fact in the AAF or Kathi-forums"
+	echo "Please report this fact in the proper forum(s)"
 	echo
 	echo "Try installing the following packages: "
 	# determine probable distribution, based on package system, 
 	# Suse should be last because the others may also have rpm installed.
 	{ `which apt-get > /dev/null 2>&1` && UBUNTU=1; } || \
 	{ `which yum     > /dev/null 2>&1` && FEDORA=1; } || \
+	{ `which dnf     > /dev/null 2>&1` && FEDORA=1; } || \
+	{ `which emerge  > /dev/null 2>&1` && GENTOO=1; } || \
 	SUSE=2
 	INSTALL="echo "
 fi
 
+if [ "$FEDORA" == 1 ]; then
+	FEDORA_VERSION=`cat /etc/fedora-release | cut -d ' ' -f3`
+#	CENTOS_VERSION=`cat /etc/centos-release | cut -d ' ' -f4`
+	if [[ "$FEDORA_VERSION" -gt "21" ]]; then
+		INSTALL="dnf install -y --best --allowerasing"
+	fi
+	#enable install of ffmpeg
+#	$INSTALL --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+fi
+
 if [ "$SUSE" == 1 ]; then
-	SUSE_VERSION=`cat /etc/SuSE-release | line | awk '{ print $2 }'`
+#	SUSE_VERSION=`cat /etc/SuSE-release | line | awk '{ print $2 }'`
 #	if [ "$SUSE_VERSION" == "12.2" ]; then
 #		zypper ar "http://download.opensuse.org/repositories/home:/toganm/openSUSE_12.2/" fakeroot
 #	fi
@@ -75,54 +92,66 @@ PACKAGES="\
 	flex \
 	bison \
 	texinfo \
-	libffi-dev \
 	intltool \
 	libtool \
 	swig \
 	dialog \
 	wget \
+	cmake \
+	gperf \
 	\
-	${UBUNTU:+rpm}                                               ${FEDORA:+rpm-build} \
-	${UBUNTU:+lsb-release}          ${SUSE:+lsb-release}         ${FEDORA:+redhat-lsb} \
-	${UBUNTU:+git-core}             ${SUSE:+git-core}            ${FEDORA:+git} \
-	${UBUNTU:+libncurses5-dev}      ${SUSE:+ncurses-devel}       ${FEDORA:+ncurses-devel} \
-	${UBUNTU:+gettext}              ${SUSE:+gettext-devel}       ${FEDORA:+gettext-devel} \
-	${UBUNTU:+zlib1g-dev}           ${SUSE:+zlib-devel}          ${FEDORA:+zlib-devel} \
+	${UBUNTU:+rpm}                                               ${FEDORA:+rpm-build}      ${GENTOO:+rpm} \
+	${UBUNTU:+lsb-release}          ${SUSE:+lsb-release}         ${FEDORA:+redhat-lsb}     ${GENTOO:+lsb-release} \
+	${UBUNTU:+git-core}             ${SUSE:+git-core}            ${FEDORA:+git}            ${GENTOO:+git} \
+	${UBUNTU:+libncurses5-dev}      ${SUSE:+ncurses-devel}       ${FEDORA:+ncurses-devel}  ${GENTOO:+ncurses} \
+	${UBUNTU:+gettext}              ${SUSE:+gettext-devel}       ${FEDORA:+gettext-devel}  ${GENTOO:+gettext} \
+	${UBUNTU:+zlib1g-dev}           ${SUSE:+zlib-devel}          ${FEDORA:+zlib-devel}     ${GENTOO:+zlib} \
 	${UBUNTU:+g++}                  ${SUSE:+gcc gcc-c++}         ${FEDORA:+gcc-c++} \
-	${UBUNTU:+automake}             ${SUSE:+automake make} \
-	${UBUNTU:+xfslibs-dev}          ${SUSE:+xfsprogs-devel} \
-	${UBUNTU:+pkg-config}           ${SUSE:+pkg-config} \
-	${UBUNTU:+patch}                ${SUSE:+patch} \
-	${UBUNTU:+autopoint}            ${SUSE:+glib2-devel} \
-	${UBUNTU:+cfv}                  ${SUSE:+fakeroot} \
-	${UBUNTU:+fakeroot} \
-	${UBUNTU:+gawk} \
-	${UBUNTU:+gperf} \
-	${UBUNTU:+libglib2.0-bin} \
-	${UBUNTU:+libglib2.0-dev} \
-	${UBUNTU:+doc-base} \
-	${UBUNTU:+texi2html} \
+	${UBUNTU:+libffi-dev}           ${SUSE:+libffi-devel}        ${FEDORA:+libffi-devel}   ${GENTOO:+libffi} \
+	${UBUNTU:+automake}             ${SUSE:+automake make}                                 ${GENTOO:+automake} \
+	${UBUNTU:+xfslibs-dev}          ${SUSE:+xfsprogs-devel}                                ${GENTOO:+xfsprogs} \
+	${UBUNTU:+pkg-config}           ${SUSE:+pkg-config}                                    ${GENTOO:+pkg-config} \
+	${UBUNTU:+patch}                ${SUSE:+patch}                                         ${GENTOO:+patch} \
+	${UBUNTU:+autopoint} \
+	${UBUNTU:+cfv}                                                                         ${GENTOO:+cfv} \
+	${UBUNTU:+fakeroot}                                                                    ${GENTOO:+fakeroot} \
+	${UBUNTU:+gawk}                                                                        ${GENTOO:+gawk} \
+	${UBUNTU:+libglib2.0-bin}       ${SUSE:+glib2-devel}                                   ${GENTOO:+glib:2} \
+	${UBUNTU:+libglib2.0-dev}       ${SUSE:+glibc-devel-static}  ${FEDORA:+glibc-static} \
+	${UBUNTU:+doc-base}             ${SUSE:+libuuid-devel}       ${FEDORA:+libuuid-devel} \
+	${UBUNTU:+texi2htm } \
 	${UBUNTU:+help2man} \
 	${UBUNTU:+libgpgme11-dev} \
 	${UBUNTU:+libcurl4-openssl-dev} \
-	${UBUNTU:+liblzo2-dev} \
+	${UBUNTU:+liblzo2-dev}          ${SUSE:+lzo-devel}           ${FEDORA:+lzo-devel}      ${GENTOO:+lzo:2} \
 	${UBUNTU:+libsdl-image1.2} \
 	${UBUNTU:+libsdl-image1.2-dev} \
-	${UBUNTU:+cmake} \
-	${UBUNTU:+ruby} \
-	${UBUNTU:+libtool-bin} \
+	${UBUNTU:+ruby}                                                                        ${GENTOO:+ruby} \
+	${UBUNTU:+libltdl-dev}                                       ${FEDORA:+libtool-ltdl-devel} \
 ";
+
+if [ "$UBUNTU" == 1 ]; then
+	UBUNTU_VERSION=`lsb_release -r | grep "Release" | cut -f2`
+	if [ "$UBUNTU_VERSION" == "16.04" ]; then
+		PACKAGES="$PACKAGES \
+		${UBUNTU:+libtool-bin} \
+		";
+	fi
+fi
 
 if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
 	# ST changed to the -m32 option for their gcc compiler build
 	# we might need to install more 32bit versions of some packages
 	PACKAGES="$PACKAGES \
-	${UBUNTU:+gcc-multilib}         ${SUSE:+gcc-32bit}           ${FEDORA:+libstdc++-devel.i686} \
-	${UBUNTU:+libc6-dev-i386}       ${SUSE:+zlib-devel-32bit}    ${FEDORA:+glibc-devel.i686} \
-	${UBUNTU:+lib32z1-dev}                                       ${FEDORA:+libgcc.i686} \
-	                                                             ${FEDORA:+ncurses-devel.i686} \
+	${UBUNTU:+gcc-multilib}         ${SUSE:+gcc-32bit}              ${FEDORA:+libstdc++-devel.i686} \
+	${UBUNTU:+libc6-dev-i386}       ${SUSE:+glibc-devel-32bit}      ${FEDORA:+glibc-devel.i686} \
+	${UBUNTU:+lib32z1-dev}          ${SUSE:+zlib-devel-32bit}       ${FEDORA:+libgcc.i686} \
+	                                                                ${FEDORA:+ncurses-devel.i686} \
+                                                                        ${FEDORA:+redhat-lsb.i686} \
+                                        ${SUSE:+libstdc++-devel-32bit}  ${FEDORA:+glibc-static.i686} \
 	";
 fi
+echo $INSTALL $PACKAGES
 $INSTALL $PACKAGES
 
 # Link sh to bash instead of dash on Ubuntu (and possibly others)
