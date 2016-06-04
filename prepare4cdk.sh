@@ -119,7 +119,7 @@ PACKAGES="\
 	${UBUNTU:+libglib2.0-bin}       ${SUSE:+glib2-devel}                                   ${GENTOO:+glib:2} \
 	${UBUNTU:+libglib2.0-dev}       ${SUSE:+glibc-devel-static}  ${FEDORA:+glibc-static} \
 	${UBUNTU:+doc-base}             ${SUSE:+libuuid-devel}       ${FEDORA:+libuuid-devel} \
-	${UBUNTU:+texi2htm } \
+	${UBUNTU:+texi2html} \
 	${UBUNTU:+help2man} \
 	${UBUNTU:+libgpgme11-dev} \
 	${UBUNTU:+libcurl4-openssl-dev} \
