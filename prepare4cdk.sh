@@ -23,8 +23,8 @@ if `which lsb_release > /dev/null 2>&1`; then
 		CentOS*) FEDORA=1; INSTALL="yum install -y";;
 		SUSE*)   SUSE=1;   INSTALL="zypper install -y";;
 		Ubuntu*) UBUNTU=1; INSTALL="apt-get -y install";;
-		LinuxM*) UBUNTU=1; INSTALL="apt-get --force-yes install";;
-		Gentoo) GENTOO=1; INSTALL="emerge -uN";;
+		LinuxM*) UBUNTU=2; INSTALL="apt-get --force-yes install";;
+		Gentoo)  GENTOO=1; INSTALL="emerge -uN";;
 	esac
 fi
 
@@ -132,11 +132,13 @@ PACKAGES="\
 
 if [ "$UBUNTU" == 1 ]; then
 	UBUNTU_VERSION=`lsb_release -r | grep "Release" | cut -f2`
-	if [ "$UBUNTU_VERSION" == "16.04" ]; then
-		PACKAGES="$PACKAGES \
-		${UBUNTU:+libtool-bin} \
-		";
-	fi
+elif [ "$UBUNTU" == 2 ]; then
+	MINT_VERSION=`lsb_release -r | grep "Release" | cut -f2`
+fi
+if [ "$UBUNTU_VERSION" -ge "16" ] || [ "$MINT_VERSION" -ge "18" ]; then
+	PACKAGES="$PACKAGES \
+	${UBUNTU:+libtool-bin} \
+	";
 fi
 
 if [ `which arch > /dev/null 2>&1 && arch || uname -m` == x86_64 ]; then
