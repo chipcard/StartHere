@@ -131,7 +131,7 @@ PACKAGES="\
 ";
 
 if [ "$UBUNTU" == 1 ]; then
-	UBUNTU_VERSION=`lsb_release -r | grep "Release" | cut -f2`
+	UBUNTU_VERSION=`lsb_release -r | grep "Release" | cut -f2 | cut -d . -f1`
 elif [ "$UBUNTU" == 2 ]; then
 	MINT_VERSION=`lsb_release -r | grep "Release" | cut -f2`
 fi
