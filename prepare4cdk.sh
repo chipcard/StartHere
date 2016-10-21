@@ -116,17 +116,17 @@ PACKAGES="\
 	${UBUNTU:+cfv}                                                                         ${GENTOO:+cfv} \
 	${UBUNTU:+fakeroot}                                                                    ${GENTOO:+fakeroot} \
 	${UBUNTU:+gawk}                                                                        ${GENTOO:+gawk} \
-	${UBUNTU:+libglib2.0-bin}       ${SUSE:+glib2-devel}                                   ${GENTOO:+glib:2} \
+	${UBUNTU:+libglib2.0-bin}       ${SUSE:+glib2-devel}         ${FEDORA:+glib2-devel}    ${GENTOO:+glib:2} \
 	${UBUNTU:+libglib2.0-dev}       ${SUSE:+glibc-devel-static}  ${FEDORA:+glibc-static} \
 	${UBUNTU:+doc-base}             ${SUSE:+libuuid-devel}       ${FEDORA:+libuuid-devel} \
 	${UBUNTU:+texi2html} \
 	${UBUNTU:+help2man} \
 	${UBUNTU:+libgpgme11-dev} \
-	${UBUNTU:+libcurl4-openssl-dev} \
+	${UBUNTU:+libcurl4-openssl-dev}                              ${FEDORA:+libcurl-devel} \
 	${UBUNTU:+liblzo2-dev}          ${SUSE:+lzo-devel}           ${FEDORA:+lzo-devel}      ${GENTOO:+lzo:2} \
 	${UBUNTU:+libsdl-image1.2} \
-	${UBUNTU:+libsdl-image1.2-dev} \
-	${UBUNTU:+ruby}                                                                        ${GENTOO:+ruby} \
+	${UBUNTU:+libsdl-image1.2-dev}                               ${FEDORA:+gpgme-devel} \
+	${UBUNTU:+ruby}                                              ${FEDORA:+openssl-devel}  ${GENTOO:+ruby} \
 	${UBUNTU:+libltdl-dev}                                       ${FEDORA:+libtool-ltdl-devel} \
 ";
 
@@ -135,7 +135,7 @@ if [ "$UBUNTU" == 1 ]; then
 elif [ "$UBUNTU" == 2 ]; then
 	MINT_VERSION=`lsb_release -r | grep "Release" | cut -f2`
 fi
-if [ "$UBUNTU_VERSION" -ge "16" ] || [ "$MINT_VERSION" -ge "18" ]; then
+if ([ "$UBUNTU" == 1  ] &&  "$UBUNTU_VERSION" -ge "16" ]) || ([ "$UBUNTU" == 2 ] && [ "$MINT_VERSION" -ge "18" ]); then
 	PACKAGES="$PACKAGES \
 	${UBUNTU:+libtool-bin} \
 	";
