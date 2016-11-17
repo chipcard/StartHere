@@ -128,6 +128,7 @@ PACKAGES="\
 	${UBUNTU:+libsdl-image1.2-dev}                               ${FEDORA:+gpgme-devel} \
 	${UBUNTU:+ruby}                                              ${FEDORA:+openssl-devel}  ${GENTOO:+ruby} \
 	${UBUNTU:+libltdl-dev}                                       ${FEDORA:+libtool-ltdl-devel} \
+	                                                             ${FEDORA:+byacc} \
 ";
 
 if [ "$UBUNTU" == 1 ]; then

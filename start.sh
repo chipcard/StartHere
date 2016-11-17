@@ -4,7 +4,7 @@ DIR=`pwd`
 GITPULL="git pull"
 GITPUSH="git push origin master"
 GITSTATUS="git status"
-REPLIST="apps cdk driver flash"
+REPLIST="apps cdk cdk_new driver flash"
 
 case "$1" in
 	clone)
@@ -39,6 +39,7 @@ case "$1" in
 			$GITPUSH
 			cd ..
 			done
+			$GITPUSH
 			;;
 	status)
 		for f in  $REPLIST ; do
@@ -47,6 +48,7 @@ case "$1" in
 			$GITSTATUS
 			cd ..
 			done
+			$GITSTATUS
 			;;
 	*)
 		if [ -d cdk ]; then
