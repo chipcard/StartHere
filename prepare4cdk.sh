@@ -126,9 +126,10 @@ PACKAGES="\
 	${UBUNTU:+liblzo2-dev}          ${SUSE:+lzo-devel}           ${FEDORA:+lzo-devel}      ${GENTOO:+lzo:2} \
 	${UBUNTU:+libsdl-image1.2} \
 	${UBUNTU:+libsdl-image1.2-dev}                               ${FEDORA:+gpgme-devel} \
-	${UBUNTU:+ruby}                                              ${FEDORA:+openssl-devel}  ${GENTOO:+ruby} \
+	${UBUNTU:+ruby}                                                                        ${GENTOO:+ruby} \
 	${UBUNTU:+libltdl-dev}                                       ${FEDORA:+libtool-ltdl-devel} \
 	                                                             ${FEDORA:+byacc} \
+	${UBUNTU:+libssl-dev}                                        ${FEDORA:+openssl-devel} \
 ";
 
 if [ "$UBUNTU" == 1 ]; then
