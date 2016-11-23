@@ -130,6 +130,7 @@ PACKAGES="\
 	${UBUNTU:+libltdl-dev}                                       ${FEDORA:+libtool-ltdl-devel} \
 	                                                             ${FEDORA:+byacc} \
 	${UBUNTU:+libssl-dev}                                        ${FEDORA:+openssl-devel} \
+	${UBUNTU:+libmount-dev} \
 ";
 
 if [ "$UBUNTU" == 1 ]; then
