@@ -122,15 +122,15 @@ PACKAGES="\
 	${UBUNTU:+texi2html} \
 	${UBUNTU:+help2man} \
 	${UBUNTU:+libgpgme11-dev} \
-	${UBUNTU:+libcurl4-openssl-dev}                              ${FEDORA:+libcurl-devel} \
+	${UBUNTU:+libcurl4-openssl-dev} ${SUSE:+libcurl-devel}       ${FEDORA:+libcurl-devel} \
 	${UBUNTU:+liblzo2-dev}          ${SUSE:+lzo-devel}           ${FEDORA:+lzo-devel}      ${GENTOO:+lzo:2} \
 	${UBUNTU:+libsdl-image1.2} \
 	${UBUNTU:+libsdl-image1.2-dev}                               ${FEDORA:+gpgme-devel} \
 	${UBUNTU:+ruby}                                                                        ${GENTOO:+ruby} \
 	${UBUNTU:+libltdl-dev}                                       ${FEDORA:+libtool-ltdl-devel} \
 	                                                             ${FEDORA:+byacc} \
-	${UBUNTU:+libssl-dev}                                        ${FEDORA:+openssl-devel} \
-	${UBUNTU:+libmount-dev} \
+	${UBUNTU:+libssl-dev}           ${SUSE:+libopenssl-devel}    ${FEDORA:+openssl-devel} \
+	${UBUNTU:+libmount-dev}         ${SUSE:+libmount-devel} \
 ";
 
 if [ "$UBUNTU" == 1 ]; then
@@ -138,7 +138,7 @@ if [ "$UBUNTU" == 1 ]; then
 elif [ "$UBUNTU" == 2 ]; then
 	MINT_VERSION=`lsb_release -r | grep "Release" | cut -f2`
 fi
-if ([ "$UBUNTU" == 1  ] &&  "$UBUNTU_VERSION" -ge "16" ]) || ([ "$UBUNTU" == 2 ] && [ "$MINT_VERSION" -ge "18" ]); then
+if ([ "$UBUNTU" == 1  ] &&  [ "$UBUNTU_VERSION" -ge "16" ]) || ([ "$UBUNTU" == 2 ] && [ "$MINT_VERSION" -ge "18" ]); then
 	PACKAGES="$PACKAGES \
 	${UBUNTU:+libtool-bin} \
 	";
