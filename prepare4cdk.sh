@@ -137,8 +137,9 @@ if [ "$UBUNTU" == 1 ]; then
 	UBUNTU_VERSION=`lsb_release -r | grep "Release" | cut -f2 | cut -d . -f1`
 elif [ "$UBUNTU" == 2 ]; then
 	MINT_VERSION=`lsb_release -r | grep "Release" | cut -f2`
+	DEBIAN_VERSION=`lsb_release -a | grep "LMDE" | lsb_release -r | grep "Release" | cut -f2`
 fi
-if ([ "$UBUNTU" == 1  ] &&  [ "$UBUNTU_VERSION" -ge "16" ]) || ([ "$UBUNTU" == 2 ] && [ "$MINT_VERSION" -ge "18" ]); then
+if ([ "$UBUNTU" == 1  ] &&  [ "$UBUNTU_VERSION" -ge "16" ]) || ([ "$UBUNTU" == 2 ] && ([ "$MINT_VERSION" -ge "18" ] || [ "$DEBIAN_VERSION" -ge "2" ])); then
 	PACKAGES="$PACKAGES \
 	${UBUNTU:+libtool-bin} \
 	";
