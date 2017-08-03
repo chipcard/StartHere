@@ -4,7 +4,7 @@ DIR=`pwd`
 GITPULL="git pull"
 GITPUSH="git push origin master"
 GITSTATUS="git status"
-REPLIST="apps cdk cdk_new driver flash"
+REPLIST="apps cdk_new driver flash"
 
 case "$1" in
 	clone)
